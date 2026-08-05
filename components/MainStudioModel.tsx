@@ -1,58 +1,121 @@
 
 import { useGLTF } from "@react-three/drei";
-import { useMemo } from "react";
+import { useGSAP } from "@gsap/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three"
 
 
 
 type GLTFResult = {
     nodes: {
-        [name: string] : THREE.Mesh;
+        [name: string]: THREE.Mesh;
     }
 }
 
-export function MainStudioModel ({
+export function MainStudioModel({
     currentIndex,
     scale,
-}:{
+}: {
     currentIndex: number;
     scale: number;
-}){
-   const {nodes} = useGLTF(
-    "/models/main/MainStudio.glb"
-   ) as unknown as GLTFResult;
+}) {
+    const { nodes } = useGLTF(
+        "/models/main/MainStudio.glb"
+    ) as unknown as GLTFResult;
 
-   const textures = useMainStudioTextures();
-   const mats = createMaterials(textures) as Record<keyof typeof studioTextures.main, 
-   THREE.MeshBasicMaterial>;
+    const textures = useMainStudioTextures();
+    const mats = createMaterials(textures) as Record<keyof typeof studioTextures.main,
+        THREE.MeshBasicMaterial>;
 
-   const shirts = useMemo(
-    ()=> [
-        {
-            position: [0.65, 0.7, -0.45] as [number, number, number],
-            rotation: [0, Math.PI / 9,0] as [number, number, number],
-            geometry: nodes.Shirt_White.geometry,
-            materials: mats.whiteShirt,
-            hoverMat: mats.whiteStudio,
-            slug: "white",
-        },
-        {
-            position: [0, 0.7, 0] as [number, number, number],
-            rotation: [0, 0, 0] as [number, number, number],
-            geometry: nodes.Shirt_Sport.geometry,
-            materials: mats.sportShirt,
-            hoverMat: mats.redStudio,
-            slug: "sport",
-        },
-        {
-            position: [-0.65, 0.7, -0.45] as [number, number, number],
-            rotation: [0, -Math.PI / 9,0] as [number, number, number],
-            geometry: nodes.Shirt_Gray.geometry,
-            materials: mats.grayShirt,
-            hoverMat: mats.grayStudio,
-            slug: "gray",
-        },
-    ],
-    [nodes, mats]
-   );
+    const shirts = useMemo(
+        () => [
+            {
+                position: [0.65, 0.7, -0.45] as [number, number, number],
+                rotation: [0, Math.PI / 9, 0] as [number, number, number],
+                geometry: nodes.Shirt_White.geometry,
+                materials: mats.whiteShirt,
+                hoverMat: mats.whiteStudio,
+                slug: "white",
+            },
+            {
+                position: [0, 0.7, 0] as [number, number, number],
+                rotation: [0, 0, 0] as [number, number, number],
+                geometry: nodes.Shirt_Sport.geometry,
+                materials: mats.sportShirt,
+                hoverMat: mats.redStudio,
+                slug: "sport",
+            },
+            {
+                position: [-0.65, 0.7, -0.45] as [number, number, number],
+                rotation: [0, -Math.PI / 9, 0] as [number, number, number],
+                geometry: nodes.Shirt_Gray.geometry,
+                materials: mats.grayShirt,
+                hoverMat: mats.grayStudio,
+                slug: "gray",
+            },
+        ],
+        [nodes, mats]
+    );
+    const [envMaterial, setEnvMaterial] = useState<THREE.MeshBasicMaterial>(
+        mats.defaultStudio
+    );
+    const groupRef = useRef<THREE.Group>(null);
+    const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
+    const tlRefs = useRef<GSAPTimeline[]>([]);
+    const router = useRouter();
+    useEffect(() => {
+        shirts.forEach((shirt) => {
+            router.prefetch(`/shirts/${shirt.slug}`);
+        });
+    }, [router, shirts]);
+
+    useGSAP(() => {
+        const hasAnimationRun = sessionStorage.getItem("mainStudioAnimationRan")
+        if (!groupRef.current || hasAnimationRun) return;
+        gsap.from(groupRef.current.position, {
+            y: -0.15,
+            z: 2,
+            duration: 4,
+            ease: "power4.inOut",
+            onComplete: () => {
+                sessionStorage.setItem("mainStudioAnimationRan", "true")
+            }
+        });
+        meshRefs.current.forEach((shirt, i) => {
+            if (!shirt) return;
+            gsap.from(shirt.position,{
+                x: shirt.position.x * 2,
+                delay: 1,
+                duration: 3,
+                ease: "power2.out",
+            });
+            gsap.from(shirt.rotation,{
+                y: shirt.rotation.y * 4,
+                delay: 1,
+                duration: 3,
+                ease: "power2.out",
+            });
+        });
+    });
+
+    useGSAP(() => {
+        if(!meshRefs.current) return;
+        meshRefs.current.forEach((mesh, i ) => {
+            if(!mesh) return;
+            tlRefs.current[i] = gsap.timeline({paused: true})
+            .to(mesh.rotation, {y: 0, duration: 1, ease: "power1.inOut"})
+            .to(
+                mesh.scale,
+                {
+                    x: 1.05,
+                    y: 1.05,
+                    z: 1.05,
+                    duration: 1,
+                    ease: "power1.inOut",
+                },
+                "<"
+            );
+        })
+    })
 }
