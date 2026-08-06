@@ -4,6 +4,9 @@ import { useGSAP } from "@gsap/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three"
+import { useMainStudioTextures } from "@/lib/useTextures";
+import { studioTextures } from "@/lib/textures";
+import { createMaterials } from "@/lib/material";
 
 
 
@@ -118,4 +121,36 @@ export function MainStudioModel({
             );
         })
     })
+
+    useGSAP(() => {
+        if(window.innerWidth > 768) return;
+        for(let i = 0; i < meshRefs.current.length; i++){
+            const mesh = meshRefs.current[i];
+            if(!mesh) return;
+            switch (currentIndex){
+                case 0:
+                    gsap.to(mesh.position, {x: mesh.position.x - 0.65});
+                    gsap.to(mesh.rotation, {y:0});
+                    gsap.to(meshRefs.current[0]!.position, {z:0});
+                    gsap.to(meshRefs.current[1]!.position, {z:-0.45});
+                    setEnvMaterial(mats.whiteStudio);
+                    break;
+                case 1:
+                    gsap.to(mesh.position,{
+                        x: shirts[i].position[0],
+                        z: shirts[i].position[2],
+                    });
+                    setEnvMaterial(mats.redStudio);
+                    break;
+                case 2:
+                    gsap.to(mesh.position, {x: mesh.position.x + 0.65});
+                    gsap.to(mesh.rotation, {y:0});
+                    gsap.to(meshRefs.current[2]!.position, {z:0});
+                    gsap.to(meshRefs.current[1]!.position, {z:-0.45});
+                    setEnvMaterial(mats.whiteStudio);
+                    break;
+
+            }
+        }
+    }, [currentIndex])
 }
