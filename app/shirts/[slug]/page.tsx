@@ -1,6 +1,7 @@
 "use client"
 
 import Scene from "@/components/Scene";
+import ScrollIndicator from "@/components/ScrollIndicator";
 import { ShirtType } from "@/lib/textures";
 import { notFound, useParams } from "next/navigation"
 
@@ -11,7 +12,9 @@ const Page = () => {
        return(
           <>
              <Scene shirtType={shirtType}/>
-             <Scroll shirtType={shirtType}/>
+             <ScrollIndicator shirtType={shirtType}/>
           </>
        )
 }
+
+export default Page;
