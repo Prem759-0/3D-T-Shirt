@@ -38,7 +38,7 @@ export function MainStudioModel({
                 rotation: [0, Math.PI / 9, 0] as [number, number, number],
                 geometry: nodes.Shirt_White.geometry,
                 materials: mats.whiteShirt,
-                hoverMat: mats.whiteStudio,
+                hoverdMat: mats.whiteStudio,
                 slug: "white",
             },
             {
@@ -46,7 +46,7 @@ export function MainStudioModel({
                 rotation: [0, 0, 0] as [number, number, number],
                 geometry: nodes.Shirt_Sport.geometry,
                 materials: mats.sportShirt,
-                hoverMat: mats.redStudio,
+                hoverdMat: mats.redStudio,
                 slug: "sport",
             },
             {
@@ -54,7 +54,7 @@ export function MainStudioModel({
                 rotation: [0, -Math.PI / 9, 0] as [number, number, number],
                 geometry: nodes.Shirt_Gray.geometry,
                 materials: mats.grayShirt,
-                hoverMat: mats.grayStudio,
+                hoverdMat: mats.grayStudio,
                 slug: "gray",
             },
         ],
@@ -152,5 +152,52 @@ export function MainStudioModel({
 
             }
         }
-    }, [currentIndex])
+    }, [currentIndex]);
+    function enterHandler(index: number, material: THREE.MeshBasicMaterial){
+        document.body.style.cursor = "pointer";
+        setEnvMaterial(material);
+        tlRefs.current[index].play();
+    }
+    function leaveHandler(index: number){
+        document.body.style.cursor = "pointer";
+        tlRefs.current[index].reverse();
+    }
+    function handleClick(slug: string){
+       router.push(`/shirts/${slug}`);
+      document.body.style.cursor = "auto";
+    }
+
+   return (
+
+   <group ref={groupRef} dispose={null} scale={scale}>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Environment.geometry}
+        material={envMaterial}
+      />
+      {shirts.map((shirt, i) => (
+        <mesh
+          key={i}
+          ref={(m) => {
+            if (!m) return;
+            meshRefs.current[i] = m;
+          }}
+          geometry={shirt.geometry}
+          material={shirt.materials}
+          position={shirt.position}
+          rotation={shirt.rotation}
+          onPointerEnter={() => enterHandler(i, shirt.hoverdMat)}
+          onPointerLeave={() => leaveHandler(i)}
+          onClick={() => handleClick(shirt.slug)}
+        />
+      ))}
+      <mesh
+        geometry={nodes.Hitbox.geometry}
+        scale={[2.52, 1, 1]}
+        visible={false}
+        onPointerLeave={() => setEnvMaterial(mats.defaultStudio)}
+      />
+    </group>
+   )
 }
