@@ -139,3 +139,5 @@ const ThirdModel = ({ shirtType }: { shirtType: ShirtType }) => {
     </group>
     )
 }
+
+export default ThirdModel;

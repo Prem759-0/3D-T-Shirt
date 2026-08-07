@@ -11,7 +11,7 @@ const Page = () => {
        return(
           <>
              <Scene shirtType={shirtType}/>
-             <ScrollIndicator shirtType={shirtType}/>
+             <Scroll shirtType={shirtType}/>
           </>
        )
 }

@@ -3,6 +3,7 @@ import { FirstWhiteModel } from "./FirstWhiteModel";
 import { FirstGrayModel } from "./FirstGrayModel";
 import { FirstSportModel } from "./FirstSportModel";
 import { SecondModel } from "./SecondModel";
+import ThirdModel from "./ThirdModel";
 
 
 type Props = {
