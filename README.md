@@ -6,7 +6,7 @@ An interactive, animated 3D product viewing experience built with Next.js, Three
 
 ---
 
-![3D T-Shirt Configurator](./public/file.svg)
+
 
 ## About The Project
 
