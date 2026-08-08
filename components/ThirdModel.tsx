@@ -48,7 +48,7 @@ const ThirdModel = ({ shirtType }: { shirtType: ShirtType }) => {
 
     const handleButtonClick = useCallback((e: ThreeEvent<MouseEvent>) => {
         e.stopPropagation();
-        window.open("https://google.com", "_blank");
+        window.open("https://github.com/Prem759-0", "_blank");
     }, []);
 
     return (
