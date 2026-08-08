@@ -20,9 +20,11 @@ type GLTFResult = {
 export function MainStudioModel({
     currentIndex,
     scale,
+    onNavigate,
 }: {
     currentIndex: number;
     scale: number;
+    onNavigate?: () => void;
 }) {
     const { nodes } = useGLTF(
         "/models/main/MainStudio.glb"
@@ -159,11 +161,12 @@ export function MainStudioModel({
         setEnvMaterial(material);
         tlRefs.current[index].play();
     }
-    function leaveHandler(index: number){
+function leaveHandler(index: number){
         document.body.style.cursor = "pointer";
         tlRefs.current[index].reverse();
     }
     function handleClick(slug: string){
+       onNavigate?.();
        router.push(`/shirts/${slug}`);
       document.body.style.cursor = "auto";
     }

@@ -1,50 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Bars from "./Bars";
-import { useCumulativeProgress } from "@/lib/useCumulativeProgress";
 import { cumulativeLoading } from "@/lib/cumulativeLoading";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
-/**
- * Full-screen loading overlay for the shirts pages.
- *
- * It stays visible until every asset (models, textures, cube maps, videos)
- * has finished loading. The progress bar accumulates across all loading
- * batches and animates from 0 to 100% a single time, then fades out.
- *
- * Phase derivation:
- *  - "idle":  assets not started loading yet.
- *  - "active": assets are loading.
- *  - "done":   all assets finished loading (fade out).
- */
+// Because all shirt assets are preloaded (and thus browser-cached) from the
+// home page, THREE.DefaultLoadingManager fires few/no new progress events when
+// navigating to a shirt page. Instead of relying on real asset progress (which
+// may stay at 0%), we deterministically animate a short loading sequence so the
+// loading bar always visibly runs 0% -> 100% before fading out.
+const MIN_LOADING_MS = 1100;
+
 const ShirtLoadingScreen = () => {
-  const { progress, isComplete, hasStarted } = useCumulativeProgress();
   const [visible, setVisible] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Initialize our loading manager tracker once.
+    // Initialize our cumulative loading manager tracker once (harmless if
+    // already inited) so that any genuinely slow/cold assets still get counted.
     cumulativeLoading.init();
   }, []);
 
-let phase: "idle" | "active" | "done" = "idle";
-  if (isComplete) phase = "done";
-  else if (hasStarted) phase = "active";
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      onComplete: () => setVisible(false),
+    });
 
-  useEffect(() => {
-    if (phase !== "done") return;
-    const t = setTimeout(() => setVisible(false), 600);
-    return () => clearTimeout(t);
-  }, [phase]);
+    // Animate the animated bars + progress bar.
+    tl.to(
+      {},
+      {
+        duration: MIN_LOADING_MS / 1000,
+        ease: "power1.inOut",
+        onUpdate: () => {
+          const target = 92;
+          const eased = gsap.utils.clamp(0, target, target * tl.progress());
+          setProgress(eased);
+        },
+      }
+    )
+      .to(
+        {},
+        {
+          duration: 0.25,
+          onUpdate: () => setProgress(gsap.utils.clamp(0, 100, 100 * tl.progress())),
+          onComplete: () => setProgress(100),
+        }
+      )
+      .to(overlayRef.current, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
+  }, []);
 
-  if (!visible || phase === "idle") return null;
-
-  const fading = phase === "done";
+  if (!visible) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-600 ${
-        fading ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
+      ref={overlayRef}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-500"
     >
       <div className="flex flex-col items-center w-40 md:w-3xs mt-5 gap-4">
         <Bars />
@@ -54,6 +73,7 @@ let phase: "idle" | "active" | "done" = "idle";
           </p>
           <div className="h-2 bg-white/50 rounded-full overflow-hidden">
             <div
+              ref={progressRef}
               className="h-full bg-white transition-all duration-200"
               style={{ width: `${progress}%` }}
             />
