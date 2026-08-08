@@ -15,7 +15,7 @@ type GLTFResult = {
 
 export function FirstWhiteModel() {
     const {nodes} = useGLTF(
-        "/models/white/whiteStudio.glb"
+        "/models/white/WhiteStudio.glb"
     ) as unknown as GLTFResult;
 
     const stencil = useMask(1);

@@ -4,6 +4,8 @@ import { FirstGrayModel } from "./FirstGrayModel";
 import { FirstSportModel } from "./FirstSportModel";
 import { SecondModel } from "./SecondModel";
 import ThirdModel from "./ThirdModel";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 
 type Props = {
