@@ -10,10 +10,10 @@ export default  function Home () {
     const isMobile = useMediaQuery({maxWidth:400});
     const [currentIndex, setCurrentIndex] = useState(1)
     const handlePrev = () => {
-        if(currentIndex > 0) setCurrentIndex((prev) => prev - 1)
+        if(currentIndex < 2) setCurrentIndex((prev) => prev + 1)
     }
     const handleNext = () => {
-        if(currentIndex > 2) setCurrentIndex((prev) => prev + 1)
+        if(currentIndex > 0) setCurrentIndex((prev) => prev - 1)
     }
 
     return (
@@ -31,7 +31,7 @@ export default  function Home () {
           <div
             id="left-icon"
             className="absolute z-10 top-10/12 left-1/12
-                        bg-white mask-[url](/icons/left.svg)] 
+                        bg-white [mask-image:url('/icons/left.svg')]
                         size-12 mask-no-repeat border hover-animation
                          md:hidden block"
             onClick={handlePrev}
@@ -41,7 +41,7 @@ export default  function Home () {
           <div
             id="right-icon"
             className="absolute z-20 top-10/12 right-1/12
-                        bg-white mask-[url](/icons/right.svg)] 
+                        bg-white [mask-image:url('/icons/right.svg')]
                         size-12 mask-no-repeat border hover-animation
                          md:hidden block"
             onClick={handleNext}

@@ -2,6 +2,7 @@
 
 import Scene from "@/components/Scene";
 import ScrollIndicator from "@/components/ScrollIndicator";
+import ShirtLoadingScreen from "@/components/ShirtLoadingScreen";
 import { ShirtType } from "@/lib/textures";
 import { notFound, useParams } from "next/navigation"
 
@@ -11,6 +12,7 @@ const Page = () => {
     if(!shirtType) return notFound();
        return(
           <>
+             <ShirtLoadingScreen/>
              <Scene shirtType={shirtType}/>
              <ScrollIndicator shirtType={shirtType}/>
           </>
