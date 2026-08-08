@@ -1,6 +1,7 @@
 
 import { useGLTF } from "@react-three/drei";
 import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three"

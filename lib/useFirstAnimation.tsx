@@ -2,6 +2,7 @@
 import { useGSAP } from "@gsap/react"
 import { RefObject } from "react"
 import * as THREE from "three"
+import gsap from "gsap";
 
 const useFirstAnimation = (
     groupRef: RefObject<THREE.Group | null>,

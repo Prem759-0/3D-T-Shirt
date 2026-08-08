@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Mulish } from "next/font/google";
 import "./globals.css";
 import ViewCanvas from "@/components/ViewCanvas";
+import Header from "@/components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,9 +14,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const mulish = Mulish({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
   title: "adidas",
-  description: "Foot Locker and adidas Originals' latest collection breaks new ground.",
+  description:
+    "Foot Locker and adidas Originals' latest collection breaks new ground.",
 };
 
 export default function RootLayout({
@@ -24,13 +32,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${mulish.className} antialiased`}
       >
-      <body className={`${Mulish.className}  antialiased`}>
-        <ViewCanvas/>
-        </body>
-        
+        <ViewCanvas />
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }

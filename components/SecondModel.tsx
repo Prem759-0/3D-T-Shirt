@@ -9,6 +9,7 @@ import useFirstAnimation from "@/lib/useFirstAnimation";
 import { useMediaQuery } from "react-responsive";
 import { shirtColors } from "@/lib/colors";
 import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 type GLTFResult = {
     nodes: {
