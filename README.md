@@ -1,156 +1,82 @@
-# 3D T-Shirt Configurator
+# 3D Animated T-Shirt Showcase
 
-An interactive, animated 3D product viewing experience built with Next.js, Three.js, and GSAP. This project showcases different t-shirt models in a dynamic 3D studio environment.
+This is an advanced, cinematic 3D website designed to showcase t-shirt products in an immersive and interactive way. The project leverages cutting-edge web technologies like Next.js, React Three Fiber, and GSAP to create a fluid, animation-driven user experience.
 
-**Live Demo:** [http://3d-tshirt-one.vercel.app/](http://3d-tshirt-one.vercel.app/)
+## Live Demo
 
----
+Experience the live version of the site here: [http://3d-tshirt-one.vercel.app/](http://3d-tshirt-one.vercel.app/)
 
+## Key Features
 
+- **Interactive 3D Homepage**: The landing page features a main 3D scene where users can cycle through and select different product experiences.
+- **Cinematic Product Pages**: Each product has a dedicated, scroll-driven animated scene that tells a story and showcases the t-shirt in a unique environment.
+- **Dynamic Theming**: The UI, including the header and footer, dynamically adapts its color scheme based on the product being viewed for a cohesive feel.
+- **High-Fidelity 3D Models**: Utilizes optimized `.glb` models with baked textures for realistic and performant 3D rendering.
+- **Complex Animations**: Powered by GSAP and React Three Fiber, the site features complex, cinematic transitions and scroll-based animations that guide the user experience.
+- **Audio Integration**: Includes a subtle music streamline component to enhance the immersive atmosphere.
+- **Responsive Design**: The experience is optimized for both desktop and mobile devices, ensuring a smooth experience across different screen sizes.
 
-## About The Project
+## Tech Stack
 
-This project is a modern e-commerce or portfolio proof-of-concept that allows users to explore a collection of t-shirts in a seamless 3D environment. It leverages a sophisticated tech stack to deliver smooth animations, realistic 3D models, and a responsive, mobile-first design. The experience begins with an overview of three distinct shirt styles, which the user can navigate between. Selecting a shirt transitions the user to a dedicated detail page with further interactive scenes.
+- **Framework**: [Next.js](https://nextjs.org/) (v16 App Router)
+- **UI Library**: [React](https://react.dev/) (v19)
+- **3D Rendering**: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction) & [Drei](https://github.com/pmndrs/drei)
+- **Animation**: [GSAP (GreenSock Animation Platform)](https://gsap.com/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
 
-## Features
+## Application Flow
 
-- **Interactive 3D Studio:** A main scene showcasing three different t-shirt models.
-- **GSAP Animations:** Complex and smooth animations for scene transitions, camera movements, and UI interactions.
-- **Dynamic Routing:** Seamless navigation between the main studio and individual product pages using Next.js App Router.
-- **Responsive Design:** A fully responsive interface that adapts to desktop and mobile devices, with distinct interaction models for each.
-- **Advanced 3D Graphics:** Utilizes `@react-three/fiber` and `@react-three/drei` for efficient and powerful 3D rendering in React.
-- **Texture & Material Management:** Pre-loads textures and dynamically swaps materials to create interactive hover and selection effects.
-- **Loading Management:** Provides visual feedback during model loading and page navigation.
+The user journey is designed to be simple and intuitive, flowing from discovery to exploration.
 
-## Technology Stack
+```mermaid
+graph TD
+    A[User lands on Homepage] --> B{Views interactive 3D carousel};
+    B --> C[Selects a T-Shirt Model];
+    C --> D[Navigates to Product Page /shirts/...];
+    D --> E[Experiences scroll-based animations];
+    E --> F{Explores 3D Scene};
+    F --> G[Clicks Header Logo];
+    G --> A;
+```
 
-This project is built with a modern, high-performance tech stack:
+## Color & Theming
 
-- **Framework:** [Next.js](https://nextjs.org/) (v16+)
-- **UI Library:** [React](https://react.dev/) (v19+)
-- **3D Rendering:** [Three.js](https://threejs.org/) via [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) & [@react-three/drei](https://github.com/pmndrs/drei)
-- **Animation:** [GSAP (GreenSock Animation Platform)](https://gsap.com/) & [@gsap/react](https://gsap.com/docs/v3/React/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Linting:** [ESLint](https://eslint.org/)
+The application uses a dynamic color system that themes the entire page based on the selected product.
+
+| Product Slug | Text Color | Scene Background |
+| :----------- | :--------- | :--------------- |
+| `sport`      | `red`      | `#2b0000`        |
+| `white`      | `black`    | `white`          |
+| `gray`       | `white`    | `#252525`        |
 
 ## Project Structure
 
 The codebase is organized into several key directories:
 
-```
-/
-├── app/                  # Next.js App Router: contains all pages and layouts.
-│   ├── shirts/[slug]/    # Dynamic route for individual shirt detail pages.
-│   ├── layout.tsx        # Root layout, sets up the main 3D canvas.
-│   └── page.tsx          # The main landing page component.
-│
-├── components/           # All React components used throughout the application.
-│   ├── MainStudioModel.tsx # The core 3D component for the landing page.
-│   ├── ViewCanvas.tsx    # Hosts the main <Canvas> for the 3D experience.
-│   └── ...               # Other UI and 3D components.
-│
-├── lib/                  # Utility functions, custom hooks, and constants.
-│   ├── useTextures.tsx   # Custom hook for loading 3D textures.
-│   ├── material.tsx      # Functions for creating and managing materials.
-│   └── ...               # Other helper modules.
-│
-├── public/               # Static assets.
-│   ├── models/           # GLB files for the 3D models.
-│   └── textures/         # Image and video textures for the models.
-│
-└── ...                   # Configuration files (package.json, next.config.ts, etc.)
-```
+- **`/app`**: Contains the core routing for the Next.js application, including the main homepage and the dynamic `[slug]` pages for each shirt.
+- **`/components`**: Holds all the React components, from UI elements like `Header` and `Footer` to the complex 3D scenes and models.
+- **`/lib`**: Includes helper functions, custom hooks, and configuration files for things like color palettes and animations.
+- **`/public`**: Stores all static assets, such as 3D models (`.glb`), textures, icons, and fonts.
 
 ## Getting Started
 
-To get a local copy up and running, follow these simple steps.
+To run this project locally, follow these steps:
 
-### Prerequisites
-
-- Node.js (v18 or later)
-- npm or yarn
-
-### Installation
-
-1.  Clone the repo
-    ```sh
-    git clone https://github.com/your-username/3d-website.git
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repository-url>
+    cd 3d-website
     ```
-2.  Install NPM packages
-    ```sh
+
+2.  **Install dependencies:**
+    ```bash
     npm install
     ```
-3.  Run the development server
-    ```sh
+
+3.  **Run the development server:**
+    ```bash
     npm run dev
     ```
-4.  Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Application Flow & Architecture
-
-The application uses a clean, component-based architecture that separates concerns effectively. The user journey is designed to be fluid and intuitive.
-
-### User Flow
-
-The primary user flow involves exploring shirts in the main studio and then diving into a detailed view.
-
-```mermaid
-graph TD
-    A[Visit Landing Page] --> B{3D Studio Loads};
-    B --> C[Intro Animation Plays];
-    C --> D{Interact with Shirts};
-    D -- Hover/Tap --> E[Shirt Animation Plays & Environment Changes];
-    D -- Click Shirt --> F{Navigate to Product Page};
-    F --> G[Show Loading Screen];
-    G --> H{Product Detail Scene Loads};
-    H --> I[Interact with Product in New 3D Scene];
-```
-
-### Component Architecture
-
-The 3D rendering is managed by a central `ViewCanvas` component that lives in the root layout. This allows for a persistent and performant 3D context across different pages.
-
--   **`app/layout.tsx`**: Renders `<ViewCanvas />` which contains the main `<Canvas>` from `@react-three/fiber`.
--   **`components/ViewCanvas.tsx`**: Sets up the Three.js canvas and shared environment settings.
--   **`app/page.tsx`**: Contains a `<View>` component from `@react-three/drei`. This `<View>` acts as a "portal" to render its children inside the main `<ViewCanvas />`.
--   **`components/MainStudioModel.tsx`**: Contains the actual `THREE.Mesh` objects, loads the GLB models, and defines the animation logic. This is rendered inside the `<View>` on the main page.
-
-This architecture is highly efficient, as the WebGL context is never destroyed during page navigation, allowing for smooth transitions.
-
-```mermaid
-graph TD
-    subgraph Root Layout
-        A[ViewCanvas]
-    end
-
-    subgraph Landing Page (`/`)
-        B[View] --> C[MainStudioModel]
-    end
-    
-    subgraph Product Page (`/shirts/[slug]`)
-        D[View] --> E[ShirtDetailModel]
-    end
-
-    A -- Renders --> B
-    A -- Renders --> D
-    C -- Contains --> F[3D Meshes & Animation Logic]
-    E -- Contains --> G[Detailed 3D Meshes & Animations]
-
-    style A fill:#222,stroke:#333,stroke-width:2px,color:#fff
-    style B fill:#333,stroke:#555,stroke-width:2px,color:#fff
-    style D fill:#333,stroke:#555,stroke-width:2px,color:#fff
-```
-
-## Animation System
-
-Animations are a core part of the experience, powered by **GSAP**.
-
--   **Intro Animation**: On the initial load of the main studio, a cinematic animation is triggered using `useGSAP` to move the camera and models into place. This is tracked via `sessionStorage` to ensure it only runs once per session.
--   **Interactive Animations**:
-    -   **Desktop**: Hovering over a shirt triggers a `gsap.timeline` that scales the model and rotates it to face the camera. The environment's texture also changes dynamically.
-    -   **Mobile**: Tapping arrows allows the user to cycle through the shirts, triggering GSAP animations that shift the positions of the models.
--   **Navigation Transitions**: When navigating to a product page, a loading screen is displayed while GSAP handles the animation of the new scene.
-
----
-This README provides a comprehensive overview of the project, its technologies, and its architecture, designed to be a helpful resource for any developer looking to understand or contribute to the codebase.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
